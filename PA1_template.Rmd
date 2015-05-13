@@ -58,12 +58,12 @@ colSums(is.na(data))[1]
 
 ```
 
-To fill in the missing values, the following code replaces any NA with the average steps for that particular interval. Using the newly created data set with no missing values, a histogram is then plotted. 
+To fill in the missing values, the following code replaces any NA with the average steps for that particular interval, rounded up to the nearest step. Using the newly created data set with no missing values, a histogram is then plotted. 
 
 ```{r}
 library(plyr)
 
-na_replaced <- ddply(data, .(interval), transform, steps = ifelse(is.na(steps), mean(steps, na.rm=TRUE), steps))
+na_replaced <- ddply(data, .(interval), transform, steps = ifelse(is.na(steps), ceiling(mean(steps, na.rm=TRUE)), steps))
 
 new_total_per_day <- tapply(na_replaced$steps, na_replaced$date, sum)
 
@@ -75,7 +75,7 @@ median(new_total_per_day)
 
 ```
 
-You can see from the calculations above that the missing values do not overly affect the mean and median of the data set. 
+You can see from the calculations above that the missing values slightly lower the mean and median of the data set. 
 
 ## Are there differences in activity patterns between weekdays and weekends?
 
