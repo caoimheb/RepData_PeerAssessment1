@@ -26,12 +26,21 @@ hist(total_per_day, breaks = 15, main = "Frequency of Total Steps Taken Per Day"
 ![](PA1_template_files/figure-html/unnamed-chunk-2-1.png) 
 
 ```r
-mean_steps <- mean(total_per_day, na.rm = TRUE)
-
-median_steps <- median(total_per_day, na.rm = TRUE)
+mean(total_per_day, na.rm = TRUE)
 ```
 
-The mean and median of the total number of steps taken per day, as calculated in the above code, are 1.0766189\times 10^{4} and 10765, respectively. 
+```
+## [1] 10766.19
+```
+
+```r
+median(total_per_day, na.rm = TRUE)
+```
+
+```
+## [1] 10765
+```
+ 
 
 ## What is the average daily activity pattern?
 
@@ -68,13 +77,13 @@ colSums(is.na(data))[1]
 ##  2304
 ```
 
-To fill in the missing values, the following code replaces any NA with the average steps for that particular interval, rounded up to the nearest step. Using the newly created data set with no missing values, a histogram is then plotted. 
+To fill in the missing values, the following code replaces any NA with the average steps for that particular interval, rounded to the nearest step. Using the newly created data set with no missing values, a histogram is then plotted. 
 
 
 ```r
 library(plyr)
 
-na_replaced <- ddply(data, .(interval), transform, steps = ifelse(is.na(steps), ceiling(mean(steps, na.rm=TRUE)), steps))
+na_replaced <- ddply(data, .(interval), transform, steps = ifelse(is.na(steps), round(mean(steps, na.rm=TRUE)), steps), digits = 0)
 
 new_total_per_day <- tapply(na_replaced$steps, na_replaced$date, sum)
 
@@ -88,7 +97,7 @@ mean(new_total_per_day)
 ```
 
 ```
-## [1] 10784.92
+## [1] 10765.64
 ```
 
 ```r
@@ -96,10 +105,10 @@ median(new_total_per_day)
 ```
 
 ```
-## [1] 10909
+## [1] 10762
 ```
 
-You can see from the calculations above that the missing values slightly lower the mean and median of the data set. 
+You can see from the calculations above that the missing values slightly raise the mean and median of the data set. 
 
 ## Are there differences in activity patterns between weekdays and weekends?
 
